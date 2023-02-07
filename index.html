@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>测试 - layui</title>
+  <link rel="stylesheet" href="lib/layui/css/layui.css">
+</head>
+
+<body>
+
+  <div class="layui-container">
+    <div class="layui-progress" style="margin: 15px 0 30px;">
+      <div class="layui-progress-bar" lay-percent="100%"></div>
+    </div>
+    <div class="layui-btn-container">
+      <button class="layui-btn" id="drawerLeft">左</button>
+      <button class="layui-btn" id="drawerRight">右</button>
+      <button class="layui-btn" id="drawerBottom">下</button>
+      <button class="layui-btn" id="drawerTop">上</button>
+      <button class="layui-btn" id="drawerIframe">iframe</button>
+      <button class="layui-btn" id="drawerOpt">更多参数</button>
+    </div>
+
+    <div class="layui-car">
+      <div class="layui-card-header">扩展</div>
+      <div class="layui-card-body">
+        <div id="drawerTargetEl" style="width: 600px;
+          height: 300px;
+          overflow: hidden;
+          position: relative;
+          border: 1px solid gainsboro;
+          background-color: #EEE;
+          margin-top: 20px;
+          display: flex;
+          justify-content: space-around;
+          align-items: center">
+          <button id="drawerTarget" class="layui-btn">挂载到指定节点</button>
+        </div>
+      </div>
+    </div>
+
+    <blockquote class="layui-elem-quote" style="margin-top: 30px;">
+      <div class="layui-text">
+        <ul>
+          <li>你当前预览的是：<span>layui-v<span id="version"></span></span></li>
+        </ul>
+      </div>
+    </blockquote>
+  </div>
+
+  <div id="demo" style="display:none;">
+    <button class="layui-btn" style="margin: 20px">一个按钮</button>
+  </div>
+  <!-- body 末尾处引入 layui -->
+  <script src="lib/layui/layui.js"></script>
+  <script>
+    //config的设置是全局的
+    layui.config({
+      base: './' //假设这是你存放拓展模块的根目录
+    }).extend({ //设定模块别名
+      drawer: 'drawer/drawer'
+    });
+
+    layui.use(['drawer','jquery','layer','element','form'],function() {
+      var layer=layui.layer;
+      var element=layui.element;
+      var drawer=layui.drawer;
+      var $=layui.jquery;
+      var form=layui.form;
+
+      $('#drawerLeft').click(function() {
+        drawer.open({
+          title: ["标题",'font-size:16px;color:#2d8cf0'],
+          offset: "l",
+          closeBtn: 1,
+          content: '<button class="layui-btn" style="margin: 20px">一个按钮</button>'
+        })
+      })
+
+      $('#drawerRight').click(function() {
+        drawer.open({
+          title: ["标题",'font-size:16px;color:#2d8cf0'],
+          offset: "r",
+          closeBtn: 1,
+          content: "抽屉内容"
+        })
+      })
+
+      $('#drawerTop').click(function() {
+        drawer.open({
+          title: ["标题",'font-size:16px;color:#2d8cf0'],
+          offset: "t",
+          closeBtn: 1,
+          content: "抽屉内容"
+        })
+      })
+
+      $('#drawerBottom').click(function() {
+        drawer.open({
+          title: ["标题",'font-size:16px;color:#2d8cf0'],
+          offset: "b",
+          closeBtn: 1,
+          content: "抽屉内容"
+        })
+      })
+
+      $('#drawerIframe').click(function() {
+        drawer.open({
+          title: ["必应",'font-size:16px;color:#2d8cf0'],
+          closeBtn: 1,
+          offset: "r",
+          area: "80%",
+          iframe: "https://cn.bing.com/",
+          content: "抽屉内容"
+        })
+      })
+
+      $('#drawerOpt').click(function() {
+        var index=drawer.open({
+          title: ["标题",'font-size:16px;color:#2d8cf0'],
+          maxmin: true,
+          area: "400px",
+          offset: "r",
+          content: `
+<form class="layui-form" action="" style="padding:10px">
+<select name="city" lay-verify="">
+  <option value="">请选择一个城市</option>
+  <option value="010">北京</option>
+  <option value="021">上海</option>
+  <option value="0571">杭州</option>
+</select>
+<input type="checkbox" name="zzz" lay-skin="switch" lay-text="开启|关闭">
+</form>
+          `,
+          success: function() {
+            form.render();
+          },
+          btn: "关闭",
+          yes: function(index,layero) {
+            drawer.close(index);
+            console.log(index,layero);
+          },
+          cancel: function() {
+            console.log("右上角关闭回调")
+          },
+          btnAlign: "l",
+          closeBtn: 1,
+        })
+      })
+
+      $('#drawerTarget').click(function() {
+        drawer.open({
+          target: "#drawerTargetEl",
+          offset: "r",
+          area: "50%",
+          content: $("#demo")
+        })
+      });
+
+      window.drawer=drawer;
+      layer.open({
+        title: "在线调试",
+        shade: false,
+        offset: "rb",
+        area: ["500px","300px"],
+        btn: false,
+        success: function(layero,index) {
+          layero.children(".layui-layer-content").css({
+            "overflow": "auto",
+            "padding": "0",
+            "height": "290px"
+          })
+        },
+        content: `
+<textarea id="testmain"
+  style="display: block;
+  width: 470px;
+  height: 220px;
+  border: 5px solid #F8F8F8;
+  border-top-width: 0;
+  padding: 10px;
+  line-height: 20px;
+  overflow: auto;
+  background-color: #3F3F3F;
+  color: #eee;
+  font-size: 12px;
+  font-family: Courier New;">
+drawer.open({
+  title: "标题",
+  area: "30%", // ['width','height'], '30%', '300px'
+  offset: "r", // l,r,t,b
+  content: "抽屉内容",
+  closeBtn: 1, //1,2, false
+  maxmin: true, 
+  btnAlign: "l", // 'l', 'c', 'r'
+  btn:["确定", "取消"]      
+})
+</textarea>
+<a href="javascript:;" 
+   style="position: absolute;right: 40px;bottom: 60px"
+   class="layui-btn layui-btn-normal" 
+   onclick="try{new Function(testmain.value)();}catch(e){alert('语句异常：'+e.message)}"
+   >立即运行
+</a>`
+      })
+
+      //输出版本号
+      lay('#version').html(layui.v);
+    });
+  </script>
+</body>
+
+</html>
