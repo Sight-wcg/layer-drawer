@@ -61,7 +61,7 @@ interface Options {
   /**
    * 设置url类型的弹层,html片段会拼接在当前页面中,片段和当前页不能有相同的id
    */
-  url?: Jquery | undefined;
+  url?: string | undefined;
   /**
    * 内容
    * @default ''
@@ -81,7 +81,7 @@ interface Options {
    * @example
    * 'r'
    */
-  offset?: string | [string, string] | undefined;
+  offset?: 'l' | 'r' | 't' | 'b' | undefined;
   /**
    * 按钮
    * @default '确认'
