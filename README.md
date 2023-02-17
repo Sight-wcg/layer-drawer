@@ -2,6 +2,8 @@
 
 ### layer-drawer 是一个基于 layer 扩展的抽屉模块
 
+[Github](https://github.com/Sight-wcg/layer-drawer) | [Demo](https://sight-wcg.github.io/layer-drawer)
+
 ![demo](img/demo.png)
 
 # 快速开始
@@ -9,9 +11,9 @@
 ```js
 // 将 `drawer` 文件夹复制到你的模块目录
 layui.config({
-      base: './' //假设这是你存放拓展模块的根目录
-    }).extend({ //设定模块别名
-      drawer: 'drawer/drawer'
+  base: './' //假设这是你存放拓展模块的根目录
+}).extend({ //设定模块别名
+  drawer: 'drawer/drawer'
 });
 
 layui.use(['drawer'],function() {
@@ -20,7 +22,7 @@ layui.use(['drawer'],function() {
   $('#drawerLeft').click(function() {
     drawer.open({
       title: ["标题",'font-size:16px;color:#2d8cf0'],
-      offset: "l",
+      offset: "r",
       closeBtn: 1,
       content: '抽屉内容'
     })
