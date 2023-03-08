@@ -1,7 +1,7 @@
 ﻿/**
  * 抽屉模块
  */
-layui.define(["jquery", "layer"], function (exports) {
+layui.define(['jquery', 'layer'], function (exports) {
   ('use strict');
 
   var MOD_NAME = 'drawer';
@@ -30,9 +30,17 @@ layui.define(["jquery", "layer"], function (exports) {
     var opt = normalizeOption(option);
     if (opt.target) appendToTarget(opt);
     if (opt.url) loadFragment(opt);
-    var layerIndex = layer.open(opt);
+    if (opt.shade) {
+      $('<style/>')
+        .attr('id', 'layer-drawer')
+        .html('.layui-layer-shade{opacity: 0;transition: opacity .35s cubic-bezier(0.34, 0.69, 0.1, 1);}') // fadeIn
+        .appendTo('head');
 
-    return layerIndex;
+      option.end = Aspect(option.end, undefined, function (layero, index) {
+        $('#layer-drawer').remove();
+      });
+    }
+    return layer.open(opt);
   }
 
   /**
@@ -40,8 +48,7 @@ layui.define(["jquery", "layer"], function (exports) {
    * @param {object} option 设置选项
    */
   function loadFragment(option) {
-    option.success = Aspect(option.success, function (layero, index) {
-      var layerID = '#' + layero.attr('id');
+    option.success = Aspect(option.success, function (layero) {
       $.ajax({
         url: option.url,
         dataType: 'html',
@@ -94,11 +101,9 @@ layui.define(["jquery", "layer"], function (exports) {
     if (option.closeBtn === undefined) option.closeBtn = false;
     if (option.shade === undefined) option.shade = 0.3;
     if (option.shadeClose === undefined) option.shadeClose = true;
-
     if (option.resize === undefined) option.resize = false;
     if (option.success === undefined) option.success = function () {}; // 处理遮罩需要
     if (option.end === undefined) option.end = function () {};
-
     return option;
   }
 
