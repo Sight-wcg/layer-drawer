@@ -132,11 +132,18 @@ interface Options {
    */
   minStack?: boolean | undefined;
   /**
+   * 关闭弹层时，是否将弹层设置为隐藏状态（而非移除），当再次打开，直接显示原来的弹层。 若设为 true，则必须同时设置 id 属性
+   * @default false
+   * @since 2.8.3
+   */
+  hideOnClose?: boolean;
+  /**
    * 层弹出后的成功回调方法
    * @param layero 当前层DOM
    * @param index 当前层索引
+   * @param instance 当前实例,2.8+
    */
-  success?(layero: JQuery, index: Index): void;
+  success?(layero: JQuery, index: Index, instance: any): void;
   /**
    * 确定按钮回调方法
    * @param index 当前层索引
